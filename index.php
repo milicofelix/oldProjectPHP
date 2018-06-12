@@ -5,6 +5,7 @@
  * Date: 04/06/18
  * Time: 22:33
  */
+//include_once "core/classes/BancoDados.php";
 include_once "core/classes/Mysql.php";
 
 $db = new Mysql();
@@ -13,9 +14,11 @@ $db->setBanco("cfswpa");
 $db->setUsuario('root');
 $db->setSenha('morango');
 $db->setPorta('3306');
-
 $db->conectar();
 
+$db->conectar()  or die($db->getUltimoErro());
+
+echo "<h1>Acesso ao banco de dados</h1>";
 
 //$sql = "CREATE TABLE tab_teste(codigo int DEFAULT 0, descricao VARCHAR(20), valor FLOAT, PRIMARY KEY(codigo))";
 //
@@ -38,9 +41,9 @@ $db->conectar();
 //    echo "3º Registro inserido com sucesso!";
 //}
 
-//$sql = "INSERT INTO tab_teste VALUES (4,'teste 4',12.12)";
+//$sql = "INSERT INTO tab_teste VALUES (5,'teste 4',14.52)";
 //if($db->executaSQL($sql)!== false){
-//    echo "3º Registro inserido com sucesso!";
+//    echo "4º Registro inserido com sucesso!";
 //}
 
 //    $sql = "INSERT INTO tab_teste VALUES (4,'teste 3',21.7)";
@@ -54,7 +57,13 @@ $sql = "SELECT * FROM tab_teste";
 
 $db->executaSQL($sql);
 
-echo "Número de registros retornado pelo SELECT {$db->getNumRows()}<br />";
+if(!empty($db->getUltimoErro())){
+    die($db->getUltimoErro());
+}
+
+//var_dump($db->getUltimoErro());
+
+echo "Número de registros retornado <strong>{$db->getNumRows()} </strong><br />";
 echo "<table border='1' cellpadding='5' width='400'>
     <tr>
         <th>Cógido</th>
@@ -70,7 +79,6 @@ while ($d = $db->proximo()){
 }
 echo "</table>";
 
-echo "<h1>Acesso ao banco de dados</h1>";
-echo "<pre>";
-print_r($db);
-echo "</pre>";
+//echo "<pre>";
+//print_r($db);
+//echo "</pre>";

@@ -15,20 +15,26 @@ class Mysql extends BancoDados {
     }
 
     protected function setNumRows() {
-        $this->numrows = ($this->dataset!==false ? $this->conn->num_rows : 0);
+//        echo "<pre>";
+//            var_dump($this->dataset->num_rows);
+//        echo "</pre>";
+        $this->numrows = ($this->dataset!==false ? $this->dataset->num_rows : 0);
     }
 
     public function conectar() {
-        if(($this->conn = new mysqli($this->servidor,$this->usuario,$this->senha,$this->banco,$this->porta))===false) {
-            $this->ultimoerro = "Erro na Conexão com o Banco de Dados : " . mysqliconnect_error();
+        $this->conn = new mysqli($this->servidor,$this->usuario,$this->senha,$this->banco,$this->porta);
+//        var_dump($this->conn->connect_errno);exit();
+        if($this->conn->connect_errno) {
+            $this->ultimoerro = "Erro na Conexão com o Banco de Dados : " . mysqli_connect_error();
+            return false;
         }
         return $this->conn;
     }
 
     public function executaSQL($_sql) {
         if($this->conn!==false) {
-            if(($_res=@$this->conn->query($_sql))===false) {
-                $this->ultimoerro = "Erro ao Executar o comando {$_sql} : " . $this->conn->error;
+            if(($_res=$this->conn->query($_sql))===false) {
+                $this->ultimoerro = "Erro ao Executar o comando {$_sql} : {$this->conn->error}";
             }
             $this->isSelect($_sql,$_res);
             return $_res;

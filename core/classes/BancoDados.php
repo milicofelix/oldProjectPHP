@@ -120,7 +120,8 @@ abstract class BancoDados {
     }
 
     public function getUltimoErro() {
-        return "[{$this->tipo}]: {$this->ultimoerro}";
+
+        return $this->ultimoerro;
     }
 
     public function converteDataToBD($_data) {
